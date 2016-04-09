@@ -6,7 +6,7 @@
 		<artifactId>customer_support_parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>customer_support_v1</artifactId>
+	<artifactId>customer_support_v01</artifactId>
 	<packaging>war</packaging>
 	<dependencies>
 		<dependency>
