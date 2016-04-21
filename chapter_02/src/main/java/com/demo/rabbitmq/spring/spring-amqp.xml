@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+           http://www.springframework.org/schema/rabbit/spring-rabbit-1.5.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+
+	
+
+	<rabbit:connection-factory id="connectionFactory" host="127.0.0.1" port="5672" virtual-host="/taotao" username="taotao" password="taotao" />
+	<rabbit:admin connection-factory="connectionFactory" />
+	
+	<rabbit:queue name="myQueue" auto-declare="true" />
+	
+	<rabbit:fanout-exchange name="fanoutExchange" auto-declare="true">
+		<rabbit:bindings>
+			<rabbit:binding queue="myQueue" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+	
+	<rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="fanoutExchange"></rabbit:template>
+
+	<rabbit:listener-container connection-factory="connectionFactory">
+		<rabbit:listener queue-names="myQueue" ref="messageConsumer" method="consume"/>
+	</rabbit:listener-container>
+	
+	<bean id="messageConsumer" class="com.demo.rabbitmq.spring.MessageConsumer" />
+	
+</beans>
