@@ -5,26 +5,30 @@
            http://www.springframework.org/schema/rabbit/spring-rabbit-1.5.xsd
            http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
-
-	
-
+           
+    <!-- Create a connection factory for the message broker -->
 	<rabbit:connection-factory id="connectionFactory" host="127.0.0.1" port="5672" virtual-host="/taotao" username="taotao" password="taotao" />
-	<rabbit:admin connection-factory="connectionFactory" />
+    <rabbit:admin connection-factory="connectionFactory" />
 	
+	<!-- Declare a queue. -->
 	<rabbit:queue name="myQueue" auto-declare="true" />
 	
+	<!-- Declare a exchange. -->
 	<rabbit:fanout-exchange name="fanoutExchange" auto-declare="true">
+		<!-- Bind the queue to the exchange. -->
 		<rabbit:bindings>
 			<rabbit:binding queue="myQueue" />
 		</rabbit:bindings>
 	</rabbit:fanout-exchange>
 	
-	<rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="fanoutExchange"></rabbit:template>
-
+	<!-- Declare a message consumer bean -->
+	<bean id="messageConsumer" class="com.demo.rabbitmq.spring.MessageConsumer" />
+	
+	<!-- Add the consumer bean to the message listener container -->
 	<rabbit:listener-container connection-factory="connectionFactory">
 		<rabbit:listener queue-names="myQueue" ref="messageConsumer" method="consume"/>
 	</rabbit:listener-container>
 	
-	<bean id="messageConsumer" class="com.demo.rabbitmq.spring.MessageConsumer" />
-	
+	<!-- Declare a message template for sending message to the message broker. -->
+	<rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="fanoutExchange"></rabbit:template>
 </beans>
