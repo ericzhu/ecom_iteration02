@@ -1,15 +1,29 @@
 package com.ecomlogix.ecom.core.product.domain;
 
-import javax.persistence.Embeddable;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-@Embeddable
-public class Review {
+import com.ecomlogix.ecom.core.base.domain.BaseEntity;
 
-   private String username;
+@Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "item_id", "username" }) })
+public class Review extends BaseEntity {
 
-   private int    stars;
+   private static final long serialVersionUID = 1L;
 
-   private String comments;
+   private String            username;
+
+   private int               stars;
+
+   private String            comments;
+
+   @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+   @JoinColumn(name = "item_id")
+   private Item              item;
 
    public Review() {}
 
@@ -43,4 +57,12 @@ public class Review {
       this.comments = comments;
    }
 
+   public Item getItem() {
+      return item;
+   }
+
+   public void setItem(Item item) {
+      this.item = item;
+      item.getReviews().add(this);
+   }
 }

@@ -5,19 +5,21 @@ import java.util.List;
 
 public class ItemDocument {
 
-   private String    itemName;
-   
-   private String itemDescription;
+   private String       itemName;
 
-   private String    image;
+   private String       itemDescription;
 
-   private String    category;
+   private String       image;
 
-   private boolean   isActive = true;
+   private String       category;
 
-   private Date      releaseDate;
+   private boolean      isActive = true;
 
-   private List<Tag> tags;
+   private Date         releaseDate;
+
+   private List<Tag>    tags;
+
+   private List<Review> reviews;
 
    public String getItemName() {
       return itemName;
@@ -25,6 +27,14 @@ public class ItemDocument {
 
    public void setItemName(String itemName) {
       this.itemName = itemName;
+   }
+
+   public String getItemDescription() {
+      return itemDescription;
+   }
+
+   public void setItemDescription(String itemDescription) {
+      this.itemDescription = itemDescription;
    }
 
    public String getImage() {
@@ -43,11 +53,11 @@ public class ItemDocument {
       this.category = category;
    }
 
-   public boolean getIsActive() {
+   public boolean isActive() {
       return isActive;
    }
 
-   public void setIsActive(boolean isActive) {
+   public void setActive(boolean isActive) {
       this.isActive = isActive;
    }
 
@@ -66,4 +76,13 @@ public class ItemDocument {
    public void setTags(List<Tag> tags) {
       this.tags = tags;
    }
+
+   public List<Review> getReviews() {
+      return reviews;
+   }
+
+   public void setReviews(List<Review> reviews) {
+      this.reviews = reviews;
+   }
+
 }

@@ -17,8 +17,13 @@ import com.ecomlogix.ecom.core.product.domain.ItemDocument;
 @Service
 public class DataIndexerServiceImpl implements DataIndexerService {
 
-   private static final String sqlItem     = "";
-   private static final String sqlItemTags = "";
+   private static final String sqlItem        = "SELECT i.id, i.version, i.isActive, i.category, i.description, i.image,i.name, i.price, i.releaseDate FROM Item i";
+
+   private static final String sqlItemTags    = "SELECT DISTINCT t.id, t.version, t.name, t.manufacturer FROM Tag t "
+                                                 + "LEFT JOIN Item_Tag it ON t.id = it.tag_id "
+                                                 + "LEFT JOIN Item i ON it.item_id = i.id WHERE i.id = ?";
+
+   private static final String sqlItemReviews = "SELECT r.id r.version r.comments r.stars r.username FROM Review r WHERE r.item_id = ?";
 
    @Inject
    private DataSource          dataSource;

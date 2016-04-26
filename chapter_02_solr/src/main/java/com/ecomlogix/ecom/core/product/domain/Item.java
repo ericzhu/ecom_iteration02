@@ -1,17 +1,17 @@
 package com.ecomlogix.ecom.core.product.domain;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -39,7 +39,7 @@ public class Item extends BaseEntity {
    private float             price;
 
    @Column
-   private boolean           active;
+   private boolean           isActive;
 
    @Column
    private Date              releaseDate;
@@ -48,10 +48,9 @@ public class Item extends BaseEntity {
    @JoinTable(name = "item_tag", joinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id") , inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id") )
    private Set<Tag>          tags;
 
-   @ElementCollection(fetch = FetchType.EAGER)
-   @CollectionTable(name = "review", joinColumns = @JoinColumn(name = "id", referencedColumnName = "id") )
+   @OneToMany(fetch = FetchType.EAGER, mappedBy = "item")
    @Fetch(FetchMode.SELECT)
-   private Set<Review>       customerReviews;
+   private Set<Review>       reviews;
 
    public Item() {}
 
@@ -61,7 +60,7 @@ public class Item extends BaseEntity {
       this.description = description;
       this.category = category;
       this.price = price;
-      this.active = true;
+      this.isActive = true;
       this.releaseDate = new Date();
    }
 
@@ -97,28 +96,20 @@ public class Item extends BaseEntity {
       this.image = image;
    }
 
-   public Set<Tag> getTags() {
-      return tags;
+   public float getPrice() {
+      return price;
    }
 
-   public void setSupportedDevices(Set<Tag> tags) {
-      this.tags = tags;
+   public void setPrice(float price) {
+      this.price = price;
    }
 
    public boolean isActive() {
-      return active;
+      return isActive;
    }
 
-   public void setActive(boolean active) {
-      this.active = active;
-   }
-
-   public Set<Review> getCustomerReviews() {
-      return customerReviews;
-   }
-
-   public void setCustomerReviews(Set<Review> customerReviews) {
-      this.customerReviews = customerReviews;
+   public void setActive(boolean isActive) {
+      this.isActive = isActive;
    }
 
    public Date getReleaseDate() {
@@ -129,11 +120,18 @@ public class Item extends BaseEntity {
       this.releaseDate = releaseDate;
    }
 
-   public float getPrice() {
-      return price;
+   public Set<Tag> getTags() {
+      return tags;
    }
 
-   public void setPrice(float price) {
-      this.price = price;
+   public void setTags(Set<Tag> tags) {
+      this.tags = tags;
+   }
+
+   public Set<Review> getReviews() {
+      if (reviews == null) {
+         reviews = new HashSet<>();
+      }
+      return reviews;
    }
 }
