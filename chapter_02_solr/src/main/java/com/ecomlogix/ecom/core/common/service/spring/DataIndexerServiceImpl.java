@@ -30,7 +30,9 @@ public class DataIndexerServiceImpl implements DataIndexerService {
 
    @Override
    public void fullBuild() {
-
+      long startTime = System.currentTimeMillis();
+      
+      
    }
 
    public List<ItemDocument> retrieveData() {
